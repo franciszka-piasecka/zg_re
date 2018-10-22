@@ -41,6 +41,8 @@ def find_shortest_distance(first_word, second_word, text):
             sought_word, found_word = found_word, sought_word
             shortest_distance = min(shortest_distance, i - last_index - 1)
             last_index = i
+        elif word == found_word:
+            last_index = i
     if shortest_distance != initial_shortest_distance:
         return shortest_distance
     else:

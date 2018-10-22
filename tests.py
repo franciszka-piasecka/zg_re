@@ -33,6 +33,14 @@ class TestFindShortestDistance(unittest.TestCase):
         result = core.find_shortest_distance('reward', 'team', words)
         self.assertEqual(result, 4)
 
+    def test_find_shortest_distance_valid_words_with_repetition(self):
+        words = (
+            'We do value and reward motivation in motivation our development team. '
+            'Development is a key skill for a DevOp.'
+        )
+        result = core.find_shortest_distance('motivation', 'development', words)
+        self.assertEqual(result, 1)
+
     def test_find_shortest_distance_one_invalid_word(self):
         words = 'We do value and reward motivation in our development team. Development is a key skill for a DevOp.'
         with self.assertRaises(ValueError):
