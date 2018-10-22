@@ -1,4 +1,3 @@
-import functools
 import string
 
 
@@ -11,21 +10,25 @@ def normalize_words(words):
 def find_shortest_distance(first_word, second_word, words):
     first_normalized_word = first_word.lower()
     second_normalized_word = second_word.lower()
-
-    def foo(total, word_tuple):
-        index, word = word_tuple
-        if word == first_normalized_word:
-            total['first_index'] = index
-        elif word == second_normalized_word:
-            total['second_index'] = index
-        total['shortest_distance'] = min(
-            total['shortest_distance'], abs(total['first_index'] - total['second_index']) - 1
-        )
-        return total
-
     normalized_words = normalize_words(words)
-    initial_distance = len(words) + 1
-    result = functools.reduce(foo, enumerate(normalized_words), {
-        'first_index': initial_distance, 'second_index': -initial_distance, 'shortest_distance': initial_distance
-    })
-    return result['shortest_distance']
+    enumerated_words = enumerate(normalized_words)
+    for i, word in enumerated_words:
+        if word == first_normalized_word:
+            sought_word = second_normalized_word
+            found_word = first_normalized_word
+            break
+        elif word == second_normalized_word:
+            sought_word = first_normalized_word
+            found_word = second_normalized_word
+            break
+    else:
+        raise ValueError()
+    last_index = i
+    # An impossible value
+    shortest_distance = len(words) + 1
+    for i, word in enumerated_words:
+        if word == sought_word:
+            sought_word, found_word = found_word, sought_word
+            shortest_distance = min(shortest_distance, i - last_index - 1)
+            last_index = i
+    return shortest_distance
